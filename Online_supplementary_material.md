@@ -830,7 +830,7 @@ AND ("climate justice" OR "environmental justice" OR "justice principle" OR "jus
 
 # Supplementary material 2
 
-- This repository contains the Python code (see RAG_pipeline.py) and the pre-built vector data stored in Chroma database (see ChromaDB) for analysis reproducibility. 
+- This repository contains the Python code (see RAG.py) and the pre-built vector data stored in Chroma database (see ChromaDB) for analysis reproducibility. 
 - It also provides prompts, queries, output examples, and documentation on operational workflow.
 
 ## A. Technical setup and configuration 
@@ -865,7 +865,7 @@ BASE/
 │── CCAP_Action_Plan/        # Original PDFs (local government plans)
 │── ChromaDB/                # Pre-built vector store persisted by Chroma
 │── Output/                  # LLM outputs: extracted text, HTML, inference results
-│── RAG_pipeline.py          # Main pipeline script
+│── RAG.py          # Main pipeline script
 ```
 
 - In the script:
