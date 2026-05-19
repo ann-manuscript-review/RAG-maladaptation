@@ -1002,36 +1002,36 @@ Output format:
 - Extraction: 
 
 ```text
-# Objective: 기후변화로부터 구민 건강 보호
-## Action: 취약계층 중심 건강관리 강화
+# Objective: 기후변화로부터 구민 건강 보호 (ENG=Protecting public health from climate change)
+## Action: 취약계층 중심 건강관리 강화 (ENG=Strengthening health management for vulnerable population groups)
 ## Maladaptation risks: (Missing)
 
-## Action: 감염병 예방 및 신속 대응체계 강화
+## Action: 감염병 예방 및 신속 대응체계 강화 (ENG=Strengthening the prevention and rapid response system for infectious diseases)
 ## Maladaptation risks: (Missing)
 
-# Objective: 구민 안전 확보 및 피해 최소화
-## Action: 폭염으로부터 안전한 생활환경 조성
+# Objective: 구민 안전 확보 및 피해 최소화 (ENG=Ensuring public safety and minimizing climate-related risks)
+## Action: 폭염으로부터 안전한 생활환경 조성 (ENG=Creating a heat-resilient community environment)
 ## Maladaptation risks: (Missing)
 
-## Action: 체계적 풍수해 대응 관리
+## Action: 체계적 풍수해 대응 관리 (ENG=Systematic management and response to storm and flood damage)
 ## Maladaptation risks: (Missing)
 
-## Action: 미세먼지 대응 강화
+## Action: 미세먼지 대응 강화 (ENG=Enhancing particulate matter mitigation)
 ## Maladaptation risks: (Missing)
 
-# Objective: 재해로부터 안전한 산림환경 구축
-## Action: 산림종합방제 시스템 구축
+# Objective: 재해로부터 안전한 산림환경 구축 (ENG=Building a safe forest environment protected from disasters)
+## Action: 산림종합방제 시스템 구축 (ENG=Establishing an integrated forest control system)
 ## Maladaptation risks: (Missing)
 
-## Action: 기후변화 적응을 위한 산림 확대
+## Action: 기후변화 적응을 위한 산림 확대 (ENG=Expanding forest cover for climate change adaptation)
 ## Maladaptation risks: (Missing)
 
-# Objective: 안정적 물이용 체계 확보
-## Action: 안전한 물 공급 및 깨끗한 수자원 관리
+# Objective: 안정적 물이용 체계 확보 (ENG=Ensuring stable water supply and clean water resource management)
+## Action: 안전한 물 공급 및 깨끗한 수자원 관리 (ENG=Ensuring a stable water supply and clean water resource management)
 ## Maladaptation risks: (Missing)
 
-# Objective: 기후변화 대응 역량 강화
-## Action: 저탄소 생활 실천 활성화
+# Objective: 기후변화 대응 역량 강화 (ENG=Strengthening capacities for climate change response )
+## Action: 저탄소 생활 실천 활성화 (ENG=Promoting the practice of low-carbon lifestyles)
 ## Maladaptation risks: (Missing)
 ```
 
