@@ -238,7 +238,18 @@ Promoting low‑carbon lifestyle measures in a top‑down, non‑contextual way 
 ```
 
 ## D. Operational workflow: End-user configuration 
-### D.1. Section extraction parameters
+### D.1. Summary
+This section explains the operation of the proposed planning support model from an end-user perspective. To run the model, users must prepare the target planning document (PDF) and access the Upstage Document Parse and OpenAI (GPT) API key. The overall operational flow comprised three stages: (1) document input and preprocessing, (2) structured information extraction, and (3) evidence-based inference of maladaptation risks. This section outlines the general workflow of these procedures. Detailed code-level instructions are provided in the online Supplementary Material. 
+
+First, the user submits the target plan as a PDF, which is converted into HTML via the Upstage Document Parse. As the parser cannot process documents exceeding 100 pages, any PDF exceeding this limit is split into 90-page segments (Figure 2(a)). Each segment is converted separately and the resulting HTML files are merged back into a document. To avoid the computational cost of scanning an entire document, the proposed model selectively reads only the relevant sections by searching for predefined keywords that appear after a user-specified starting page. Although this workflow is fully automated, users must still indicate the search starting point and keywords that guide the retrieval. 
+
+Using the converted file, the model invokes the LLM with a predefined prompt (Figure 2(b)). The prompt instructs the model to classify specific expressions in the document as objectives or actions, consistent with the terminology used in the target planning document (e.g., implementation measure → action). It also prohibits the model from rewriting the content present in the document and inferring information that is not explicitly stated. Maladaptation risks are extracted at the level of each objective–action pair, and when no such risk is explicitly mentioned in the document, the model is required to record it as ‘(Missing).’ 
+
+When potential maladaptation risks are not identified in the planning document, the user may activate an evidence-based inference module that leverages an external knowledge base (Figure 2(c)). At this stage, the user must perform an execution because the entire process is handled automatically, without controlling any internal procedures. The model generates a query for each objective–action pair, retrieves relevant literature from a Chroma vector database using bge-m3 embeddings (k=5), and applies a bge-reranker-v2-m3 reranker to select the highest-relevance texts (k=3) as the evidence.1 Based on the selected evidence, the LLM infers a concise maladaptation and provides a citation at the end in the format. 
+
+1) _k_ values are pragmatic settings to limit computational cost and are not theoretically fixed; they can be adjusted by corpus size and analytical objectives. 
+
+### D.2. Section extraction parameters
 - Users must know beforehand which page the search should start from and which keywords appear in the document. 
 - The model begins scanning after the specified page and extracts the section once the keyword is detected, meaning that some prior knowledge is required.
 - Used for target-section retrieval:
@@ -256,7 +267,7 @@ end_kw   = "계획의집행및관리"
 
 - When the planning document changes, the keywords and the search starting point must be adjusted manually.
 
-### D.2. Section extraction parameters
+### D.3. Section extraction parameters
 - The labels that correspond to {objective} and {action} must be specified for each document.
 - In this study, the prompt explicitly specified which keywords in the document should be interpreted as {objective} and {action}:
 
