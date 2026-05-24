@@ -242,6 +242,14 @@ Promoting low‑carbon lifestyle measures in a top‑down, non‑contextual way 
 
 ![Figure S1. RAG pipeline](Figure_S1.png)
 
+<p align="center">
+  <img src="Figure_S1.png" width="800">
+</p>
+
+<p align="center">
+  <b>Figure S1.</b> Model operation workflow for end users.
+</p>
+
 This section explains the operation of the proposed planning support model from an end-user perspective. To run the model, users must prepare the target planning document (PDF) and access the Upstage Document Parse and OpenAI (GPT) API key. The overall operational flow comprised three stages: (1) document input and preprocessing, (2) structured information extraction, and (3) evidence-based inference of maladaptation risks. This section outlines the general workflow of these procedures. Detailed code-level instructions are provided in the online Supplementary Material. 
 
 First, the user submits the target plan as a PDF, which is converted into HTML via the Upstage Document Parse. As the parser cannot process documents exceeding 100 pages, any PDF exceeding this limit is split into 90-page segments (Figure S1(a)). Each segment is converted separately and the resulting HTML files are merged back into a document. To avoid the computational cost of scanning an entire document, the proposed model selectively reads only the relevant sections by searching for predefined keywords that appear after a user-specified starting page. Although this workflow is fully automated, users must still indicate the search starting point and keywords that guide the retrieval. 
