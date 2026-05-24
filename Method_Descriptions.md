@@ -240,8 +240,6 @@ Promoting low‑carbon lifestyle measures in a top‑down, non‑contextual way 
 ## D. Operational workflow: End-user configuration 
 ### D.1. Summary
 
-![Figure S1. RAG pipeline](Figure_S1.png)
-
 <p align="center">
   <img src="Figure_S1.png" width="800">
 </p>
