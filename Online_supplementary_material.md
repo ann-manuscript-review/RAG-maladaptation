@@ -1,8 +1,4 @@
-# Contents
-- Supplementary material 1; Maintext Section 2.2 
-- Supplementary material 2; Maintext Section 2.3, Section 3, and Section 4
-
-# Supplementary material 2
+# Python codes and LLM prompts 
 
 - This repository contains the Python code (see RAG.py) and the pre-built vector data stored in Chroma database (see ChromaDB) for analysis reproducibility. 
 - It also provides prompts, queries, output examples, and documentation on operational workflow.
