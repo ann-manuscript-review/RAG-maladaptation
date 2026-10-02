@@ -50,7 +50,7 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 ### A.3. API keys and model configuration
 
-- Set the following environment variables before running the code:
+- Set the following variables in the script to your own API keys before running the code:
 
   - `UPSTAGE_API_KEY`
   - `OPENAI_API_KEY`
