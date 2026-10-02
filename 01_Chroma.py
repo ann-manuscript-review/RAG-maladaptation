@@ -150,7 +150,7 @@ The goal is to remove all non-body elements while keeping the sentences of the m
     - If no explicit "Introduction" or similar heading exists, begin from the first narrative or analytical paragraph that follows the Abstract or Keywords
     - Stop before any of the back matter sections as follows: References, Bibliography, Appendix, Acknowledgements, Author Contributions, Supplementary Information, or similar sections.
 3. Remove these elements entirely:
-    - Tables, figures, graphs, and their captions (including text blocks beginning with "Table", "Figure", "Fig.", "Tab.". "Graph").
+    - Tables, figures, graphs, and their captions (including text blocks beginning with "Table", "Figure", "Fig.", "Tab.", "Graph").
     - Headers, footers, watermarks, footnotes, and page numbers.
     - All citation references such as (Smith, 2020), [1], [12,13], etc.
 4. Clean up formatting:
@@ -166,7 +166,7 @@ Text:
 def clean_with_gpt(text: str) -> str:
     return ask_llm(CLEAN_PROMPT.format(text=text[:200000]))
 
-# 04. Embedding and storage
+# 04. Metadata formatting
 def flatten_meta(meta: dict) -> dict:
     return {
         k: ", ".join(map(str, v)) if isinstance(v, list) else v
