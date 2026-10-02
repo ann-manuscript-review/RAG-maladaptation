@@ -50,12 +50,12 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 ### A.3. API keys and model configuration
 
-Set the following environment variables before running the code:
+- Set the following environment variables before running the code:
 
 - `UPSTAGE_API_KEY`
 - `OPENAI_API_KEY`
 
-The pipeline uses the following models:
+- The pipeline uses the following models:
 
 | Component | Model identifier |
 |---|---|
@@ -64,15 +64,44 @@ The pipeline uses the following models:
 | Embedding | `BAAI/bge-m3` |
 | Reranking | `BAAI/bge-reranker-v2-m3` |
 
-The same GPT-5-mini snapshot (`gpt-5-mini-2025-08-07`) and reasoning effort setting (`medium`) were used across all runs. The code explicitly specifies this setting in both the information extraction and plausible maladaptation risk inference calls:
+- The same GPT-5-mini snapshot (`gpt-5-mini-2025-08-07`) and reasoning effort setting (`medium`) were used across all runs. 
+- The code explicitly specifies this setting in both the information extraction and plausible maladaptation risk inference calls:
 
 ```python
 reasoning={"effort": "medium"}
 ```
 
-No explicit output token limit (`max_output_tokens`) was set. For plausible maladaptation risk inference, the prompt instructed the model to return a single concise paragraph.
+- No explicit output token limit (`max_output_tokens`) was set. For plausible maladaptation risk inference, the prompt instructed the model to return a single concise paragraph.
 
-The reranker is initialized with `use_fp16=False`.
+- The reranker is initialized with `use_fp16=False`.
+
+### A.4. Evidence database construction
+
+- The `Chroma.py` repository provides the code used to construct the Chroma evidence database and the bibliographic list of articles included in the corpus.
+
+- The populated Chroma database is not publicly distributed because it contains article body texts, including those from non-open-access publications.
+- Source PDFs and extracted article texts are also excluded from the repository.
+
+- To construct the database locally, obtain authorized copies of the listed articles in Table S10 and configure the following directories:
+
+| Variable | Description |
+| --- | --- |
+| `PDF_DIR` | Directory containing the article PDFs |
+| `OUT_DIR` | Directory for extracted HTML, cleaned Markdown, and bibliographic metadata |
+| `INDEX_DIR` | Directory for the persistent Chroma database |
+
+- Example configuration:
+
+```python
+PDF_DIR = Path(r"C:\path\to\articles")
+OUT_DIR = Path(r"C:\path\to\processed_articles")
+INDEX_DIR = Path(r"C:\path\to\ChromaDB")
+```
+
+- The construction script parses the PDFs, extracts bibliographic metadata, cleans the article body texts, and stores the texts and their embeddings in Chroma.
+- Each article is stored as a single document without additional chunking.
+
+- After database construction, set `CHROMA_DIR` in the main inference script (`RAG.py`) to the same directory as `INDEX_DIR`.
 
 ## B. Prompt and query
 ### B.1. Information extraction 
