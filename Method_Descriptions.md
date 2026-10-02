@@ -60,19 +60,19 @@ The pipeline uses the following models:
 | Component | Model identifier |
 |---|---|
 | Document parsing | `document-parse-260930` (Upstage) |
-| Information extraction and risk inference | `gpt-5-mini-2025-08-07` (OpenAI) |
+| LLM | `gpt-5-mini-2025-08-07` (OpenAI) |
 | Embedding | `BAAI/bge-m3` |
-| Re-ranking | `BAAI/bge-reranker-v2-m3` |
+| Reranking | `BAAI/bge-reranker-v2-m3` |
 
-The same GPT-5-mini snapshot (`gpt-5-mini-2025-08-07`) and reasoning effort setting (`medium`) were used across all runs. The code explicitly specifies this setting in both the information extraction and risk inference calls:
+The same GPT-5-mini snapshot (`gpt-5-mini-2025-08-07`) and reasoning effort setting (`medium`) were used across all runs. The code explicitly specifies this setting in both the information extraction and plausible maladaptation risk inference calls:
 
 ```python
 reasoning={"effort": "medium"}
 ```
 
-No explicit output token limit (`max_output_tokens`) was set. For risk inference, the prompt instructed the model to return a single concise paragraph.
+No explicit output token limit (`max_output_tokens`) was set. For plausible maladaptation risk inference, the prompt instructed the model to return a single concise paragraph.
 
-The re-ranker is initialized with `use_fp16=False`.
+The reranker is initialized with `use_fp16=False`.
 
 ## B. Prompt and query
 ### B.1. Information extraction 
