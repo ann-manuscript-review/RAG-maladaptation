@@ -48,32 +48,31 @@ CHROMA_DIR = BASE / "ChromaDB"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 ```
 
-### A.3. API keys and model versions
+### A.3. API keys and model configuration
 
-- Require `UPSTAGE_API_KEY` and `OPENAI_API_KEY` environment variable. 
-- Following APIs are required:
-  - Upstage Document Parse (document-parse-250618)
-  - OpenAI GPT-5-mini (2025-08-07)
-- Re-ranker configuration:
+Set the following environment variables before running the code:
 
-```python
-reranker = FlagReranker("BAAI/bge-reranker-v2-m3", use_fp16=False)
-```
+- `UPSTAGE_API_KEY`
+- `OPENAI_API_KEY`
 
-- Model names used:
+The pipeline uses the following models:
 
-```python
-LLM_MODEL = "gpt-5-mini-2025-08-07"
-EMB_MODEL = "BAAI/bge-m3"
-RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
-```
+| Component | Model identifier |
+|---|---|
+| Document parsing | `document-parse-260930` (Upstage) |
+| Information extraction and risk inference | `gpt-5-mini-2025-08-07` (OpenAI) |
+| Embedding | `BAAI/bge-m3` |
+| Re-ranking | `BAAI/bge-reranker-v2-m3` |
 
-- Embedding initialization:
+The same GPT-5-mini snapshot (`gpt-5-mini-2025-08-07`) and reasoning effort setting (`medium`) were used across all runs. The code explicitly specifies this setting in both the information extraction and risk inference calls:
 
 ```python
-emb = HuggingFaceEmbeddings(model_name=EMB_MODEL)
-db = Chroma(persist_directory=str(CHROMA_DIR), embedding_function=emb)
+reasoning={"effort": "medium"}
 ```
+
+No explicit output token limit (`max_output_tokens`) was set. For risk inference, the prompt instructed the model to return a single concise paragraph.
+
+The re-ranker is initialized with `use_fp16=False`.
 
 ## B. Prompt and query
 ### B.1. Information extraction 
