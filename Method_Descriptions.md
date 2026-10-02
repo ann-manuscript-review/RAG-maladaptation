@@ -52,8 +52,8 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 - Set the following environment variables before running the code:
 
-- `UPSTAGE_API_KEY`
-- `OPENAI_API_KEY`
+  - `UPSTAGE_API_KEY`
+  - `OPENAI_API_KEY`
 
 - The pipeline uses the following models:
 
@@ -71,18 +71,20 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 reasoning={"effort": "medium"}
 ```
 
-- No explicit output token limit (`max_output_tokens`) was set. For plausible maladaptation risk inference, the prompt instructed the model to return a single concise paragraph.
+- No explicit output token limit (`max_output_tokens`) was set.
+- For plausible maladaptation risk inference, the prompt instructed the model to return a single concise paragraph.
 
 - The reranker is initialized with `use_fp16=False`.
 
 ### A.4. Evidence database construction
 
-- The `Chroma.py` repository provides the code used to construct the Chroma evidence database and the bibliographic list of articles included in the corpus.
+- The `Chroma.py` script provides the code used to construct the Chroma evidence database and the bibliographic list of articles included in the corpus.
+- The bibliographic list of articles included in the corpus is provided in Table S10 of the Supplementary Materials.
 
 - The populated Chroma database is not publicly distributed because it contains article body texts, including those from non-open-access publications.
 - Source PDFs and extracted article texts are also excluded from the repository.
 
-- To construct the database locally, obtain authorized copies of the listed articles in Table S10 and configure the following directories:
+- To construct the database locally, obtain authorized copies of the articles listed in Table S10 and configure the following directories:
 
 | Variable | Description |
 | --- | --- |
@@ -99,8 +101,6 @@ INDEX_DIR = Path(r"C:\path\to\ChromaDB")
 ```
 
 - The construction script parses the PDFs, extracts bibliographic metadata, cleans the article body texts, and stores the texts and their embeddings in Chroma.
-- Each article is stored as a single document without additional chunking.
-
 - After database construction, set `CHROMA_DIR` in the main inference script (`RAG.py`) to the same directory as `INDEX_DIR`.
 
 ## B. Prompt and query
