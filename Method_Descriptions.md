@@ -1,6 +1,6 @@
 # Python codes and LLM prompts 
 
-- This repository contains the Python code (see RAG.py) and the pre-built vector data stored in Chroma database (see ChromaDB) for analysis reproducibility. 
+- This repository provides the Python code for the analysis (_RAG.py_) and evidence database construction (_Chroma.py_) to support reproducibility
 - It also provides prompts, queries, output examples, and documentation on operational workflow.
 
 ## A. Technical setup and configuration 
@@ -78,7 +78,7 @@ reasoning={"effort": "medium"}
 
 ### A.4. Evidence database construction
 
-- The `Chroma.py` script provides the code used to construct the Chroma evidence database.
+- The _Chroma.py_ script provides the code used to construct the Chroma evidence database.
 - The bibliographic list of articles included in the corpus is provided in Table S10 of the Supplementary Materials.
 
 - The Chroma database is not publicly distributed because it contains article body texts, including those from non-open-access publications.
@@ -100,7 +100,7 @@ INDEX_DIR = Path(r"C:\path\to\ChromaDB")
 ```
 
 - The construction script parses the PDFs, extracts bibliographic metadata, cleans the article body texts, and stores the texts and their embeddings in Chroma.
-- After database construction, set `CHROMA_DIR` in the main inference script (`RAG.py`) to the same directory as `INDEX_DIR`.
+- After database construction, set `CHROMA_DIR` in the main inference script (_RAG.py_) to the same directory as `INDEX_DIR`.
 
 ## B. Prompt and query
 ### B.1. Information extraction 
