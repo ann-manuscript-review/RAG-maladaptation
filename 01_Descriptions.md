@@ -142,20 +142,20 @@ Output Structure Rules:
 ### B.2. Retrieval query 
 
 ```text
-Maladaptation from implementing '{objective}' via measure '{action}'
+Maladaptation from implementing '{objective}' via measure '{action}'.
 ```
 
 ### B.3. Inference 
 
 ```text
-# Your task is to infer maladaptation that may arise when achieving the given {objective} through its {action}.
+# Your task is to infer maladaptation risks that may arise when achieving the given {objective} through its {action}.
 
 # Maladaptation definition: 
 ## Maladaptation arises from unintended trade-offs created by implementing an action to achieve its objective—such as harms imposed on other policy goals, social groups, or spatial areas.
 ## Do not classify background problems, general negative conditions, or implementation challenges (e.g., costs, burdens, resource shortages) as maladaptation.
                  
 # Using only the contextual evidence provided below, infer maladaptation risks for each objective–action pair.
-# If no evidence supports a maladaptation, write: "(No evidence-based maladaptation found)"
+# If no evidence supports a maladaptation risks, write: "(No evidence-based maladaptation found)"
                  
 ---
 Objective: {objective}
