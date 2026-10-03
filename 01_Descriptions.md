@@ -103,7 +103,38 @@ INDEX_DIR = Path(r"C:\path\to\ChromaDB")
 - After database construction, set `CHROMA_DIR` in the main inference script (_RAG.py_) to the same directory as `INDEX_DIR`.
 
 ## B. Prompt and query
-### B.1. Information extraction 
+### B.1. Article body text cleaning
+
+- The prompt below is provided in the `extract_meta_with_llm()` function in _Chroma.py_.
+
+```text
+#The following is raw text extracted from a PDF-formatted academic article.
+
+#Your task is to extract and clean only the *main body text* from an academic article in plain text format.
+#The goal is to remove all non-body elements while keeping the sentences of the main text exactly as written.
+
+# Rules
+##1. Do not summarize, rephrase, or paraphrase; Keep the sentences exactly as in the original text.
+##2. Keep only the main body:
+### Start after the "Introduction" or equivalent main section heading.
+### If no explicit "Introduction" or similar heading exists, begin from the first narrative or analytical paragraph that follows the Abstract or Keywords
+### Stop before any of the back matter sections as follows: References, Bibliography, Appendix, Acknowledgements, Author Contributions, Supplementary Information, or similar sections.
+##3. Remove these elements entirely:
+### Tables, figures, graphs, and their captions (including text blocks beginning with "Table", "Figure", "Fig.", "Tab.". "Graph").
+### Headers, footers, watermarks, footnotes, and page numbers.
+### All citation references such as (Smith, 2020), [1], [12,13], etc.
+##4. Clean up formatting:
+### Normalize spacing, remove excessive line breaks.
+### Structure the text with Markdown headings (##, ###, ####: Section Title, and paragraphs).
+
+#Output only the cleaned Markdown text.
+
+#Text: {text}
+```
+
+### B.2. Information extraction 
+
+- The prompt below is provided in the `ask_llm_on_document()` function in _RAG.py_.
 
 ```text
 # Extract the text exactly as written in the document. Do not paraphrase, rewrite, or modify wording.
@@ -139,13 +170,17 @@ Output Structure Rules:
 {document_text}
 === DOCUMENT END ===
 ```
-### B.2. Retrieval query 
+### B.3. Retrieval query 
+
+- The prompt below is provided in the `infer_missing_impacts()` function in _RAG.py_.
 
 ```text
 Maladaptation from implementing '{objective}' via measure '{action}'.
 ```
 
-### B.3. Inference 
+### B.4. Inference 
+
+- The prompt below is provided in the `infer_missing_impacts()` function in _RAG.py_.
 
 ```text
 # Your task is to infer maladaptation risks that may arise when achieving the given {objective} through its {action}.
