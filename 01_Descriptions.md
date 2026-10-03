@@ -209,7 +209,7 @@ Contextual Evidence: {context_text}
 ## 5. If no evidence supports a maladaptation risk, output only: "(No evidence-based maladaptation found)"
 ## 6. Respond in English.
                         
-Output format (must follow this structure strictly):
+Output Format (must follow this structure strictly):
 # Inferred risk for: {objective} – {action}
 [Paragraph OR (No evidence-based maladaptation found)]
 ```
@@ -231,14 +231,14 @@ Output Format (must follow this structure strictly):
 - Inference:
 
 ```text
-Output format:
+Output Format (must follow this structure strictly):
 # Inferred risk for: {objective} – {action}
 [Paragraph OR (No evidence-based maladaptation found)]
 ```
 
 ### C.2. Output example: Geumjeong-gu, Busan
 
-- The full results for the Geumjeong-gu, Busan case presented in Section 4.1 are shown below.
+- The full results for the Geumjeong-gu, Busan case presented in Section Results are shown below.
 - This serves as a sample illustrating that the same output structure is consistently produced across other local governments.
 - In the "Extraction:" and "Inference:" examples below, the text in parentheses beginning with "ENG=" is not part of the original output but the authors’ English translation provided for readers who do not read Korean.
 - Extraction: 
@@ -248,6 +248,7 @@ Output format:
 ## Action: 취약계층 중심 건강관리 강화 (ENG = Strengthening health management for vulnerable population groups)
 ## Maladaptation risks: (Missing)
 
+# Objective: 기후변화로부터 구민 건강 보호 (ENG = Protecting public health from climate change)
 ## Action: 감염병 예방 및 신속 대응체계 강화 (ENG = Strengthening the prevention and rapid response system for infectious diseases)
 ## Maladaptation risks: (Missing)
 
@@ -255,9 +256,11 @@ Output format:
 ## Action: 폭염으로부터 안전한 생활환경 조성 (ENG = Creating a heat-resilient community environment)
 ## Maladaptation risks: (Missing)
 
+# Objective: 구민 안전 확보 및 피해 최소화 (ENG = Ensuring public safety and minimizing climate-related risks)
 ## Action: 체계적 풍수해 대응 관리 (ENG = Systematic management and response to storm and flood damage)
 ## Maladaptation risks: (Missing)
 
+# Objective: 구민 안전 확보 및 피해 최소화 (ENG = Ensuring public safety and minimizing climate-related risks)
 ## Action: 미세먼지 대응 강화 (ENG = Enhancing particulate matter mitigation)
 ## Maladaptation risks: (Missing)
 
@@ -265,6 +268,7 @@ Output format:
 ## Action: 산림종합방제 시스템 구축 (ENG = Establishing an integrated forest control system)
 ## Maladaptation risks: (Missing)
 
+# Objective: 재해로부터 안전한 산림환경 구축 (ENG = Building a safe forest environment protected from disasters)
 ## Action: 기후변화 적응을 위한 산림 확대 (ENG = Expanding forest cover for climate change adaptation)
 ## Maladaptation risks: (Missing)
 
@@ -281,31 +285,31 @@ Output format:
 
 ```text
 # Inferred risk for: 기후변화로부터 구민 건강 보호 – 취약계층 중심 건강관리 강화 (ENG = Protecting public health from climate change - Strengthening health management for vulnerable population groups)
-Focusing adaptation resources on fortifying health services for designated vulnerable groups can be maladaptive if implemented narrowly or as short‑term clinical fixes: it may substitute or transfer risks to other social groups or sectors, impose opportunity costs and path dependence by locking funding and capacity into immediate care rather than cross‑sectoral prevention and resilience, and thereby increase long‑term vulnerability or inequities instead of reducing them (Evidence: Chi et al., 2021).
+Targeting climate-health interventions narrowly at vulnerable groups (e.g., scaling clinical or short‑term measures such as increased provision of air‑conditioning or emergency services) risks maladaptation by substituting or transferring hazards and locking in path‑dependent, short‑term solutions: these actions can increase greenhouse gas emissions and energy costs (harming low‑income households), impose disproportionate burdens or worsen vulnerability in other groups or places, foreclose broader governance and preventive options (opportunity costs/path dependence), and shift risks across spatial and temporal scales if not integrated across sectors and planned with spatial scenario analysis (Evidence: Turner et al., 2023; Findlater et al., 2021; Chi et al., 2021).
 
 # Inferred risk for: 기후변화로부터 구민 건강 보호 – 감염병 예방 및 신속 대응체계 강화 (ENG = Protecting public health from climate change - Strengthening the prevention and rapid response system for infectious diseases)
-Focusing investment on technocratic, rapid-response infectious disease systems (surveillance, stockpiles, emergency teams) without integrated, long-term, multisectoral planning can produce maladaptation by creating path-dependencies and shifting or substituting risk—diverting resources from upstream determinants (water, housing, equitable services), transferring vulnerabilities onto marginalized groups or other places, and locking in high-impact practices that reduce flexibility under uncertain future climates; this risk of shifting/creating new vulnerabilities and exacerbating inequities is highlighted as a common maladaptive outcome when adaptation is narrowly framed or not assessed across spatiotemporal scales (Evidence: Chi et al., 2021; Turner et al., 2024; Pourzand et al., 2023).
+Strengthening infectious disease prevention and rapid‑response systems may produce maladaptation by creating unintended trade‑offs—for example, prioritizing techno‑centric surveillance, cold‑chains or emergency response can divert limited public‑health resources and staff from other essential services, concentrate benefits in well‑resourced urban populations while leaving rural or Indigenous communities more vulnerable (risk transfer/substitution), increase energy use or emissions and lock in path‑dependent solutions that raise long‑term vulnerability and inequities rather than reducing them (Evidence: Chi et al., 2021; Turner et al., 2023; Pourzand et al., 2023).
 
 # Inferred risk for: 구민 안전 확보 및 피해 최소화 – 폭염으로부터 안전한 생활환경 조성 (ENG = Ensuring public safety and minimizing climate-related risks - Creating a heat-resilient community environment)
-Creating heat-safe environments (e.g., large-scale provision of air-conditioning, hard cooling infrastructure, or top-down retrofit programmes) can unintentionally erode sustainable development by increasing energy use and GHG emissions, generate path dependencies and sunk costs in centralized solutions, and disproportionately burden or shift vulnerability onto low-income or less mobile residents who cannot afford operation/maintenance or are excluded from benefits; such measures can also create a false sense of security that encourages risky settlement or investment patterns and reduce incentives to build broader adaptive capacity (Evidence: Juhola et al., 2016; Chi et al., 2020; Neset et al., 2019).
+Cooling-focused interventions (e.g., widespread mechanical air conditioning, emergency cooling subsidies, or hard infrastructural fixes) risk maladaptation by increasing GHG emissions and eroding sustainable development, disproportionately burdening low‑income or otherwise vulnerable residents with energy costs, reducing incentives for low‑energy or behavioural cooling adaptations, and creating path dependencies and sunk costs that limit future flexible responses; these risks mirror documented maladaptation types and pathways including increased emissions, burdening the most vulnerable, reduced adaptation incentives, and path dependency shown in the literature (Evidence: Juhola et al., 2016; Chi et al., 2020; Neset et al., 2019).
 
 # Inferred risk for: 구민 안전 확보 및 피해 최소화 – 체계적 풍수해 대응 관리 (ENG = Ensuring public safety and minimizing climate-related risks - Systematic management and response to storm and flood damage)
-A systematic, government-led flood/wind disaster response that emphasizes hard infrastructure (elevated dikes, pumps, raised roads), emergency relief and compensation can create a false sense of security and path dependency that reduces residents' incentives to pursue independent adaptive actions or evacuate, encourages development and exposure behind defenses, shifts vulnerability onto poorer households who cannot afford private measures (e.g., foundation elevation), risks sunk costs if future conditions differ, and may erode sustainable development via increased emissions from repeated hard-structure works—thereby increasing long-term vulnerability despite short-term risk reduction (Evidence: Chi et al., 2020).
+Systematic storm‑and‑flood response based on hard infrastructure, emergency relief and subsidies can create maladaptation by fostering a false sense of security that encourages development in protected areas and reduces individual incentives to adapt, thereby shifting or increasing vulnerability for less‑resourced residents (e.g., those unable to elevate foundations), generating path‑dependency and sunk costs for governments, and eroding long‑term sustainability through increased emissions and land‑use changes; these outcomes correspond to rebounding, shifting and eroding types of maladaptation and have been documented in case studies of intensified pump/dike/road works, emergency relief dependence, and post‑disaster subsidies and land‑conversion policies (Evidence: Chi et al., 2020; Juhola et al., 2016; Chi et al., 2021).
 
 # Inferred risk for: 구민 안전 확보 및 피해 최소화 – 미세먼지 대응 강화 (ENG = Ensuring public safety and minimizing climate-related risks - Enhancing particulate matter mitigation)
-Strengthening fine‑dust responses via measures such as subsidized masks or air purifiers, centralized filtration infrastructure, and internet‑based alert systems may inadvertently create maladaptation by (1) shifting responsibility and reducing individual and community incentives for longer‑term emission reductions (dependency on government relief/subsidies), (2) disproportionately benefiting wealthier or digitally connected residents who can access or afford home filtration and online warnings while leaving the most vulnerable exposed, (3) locking public budgets into energy‑intensive, capital‑heavy technologies that raise operating emissions and risk becoming sunk costs or path‑dependent investments if pollution patterns change, and (4) excluding groups (e.g., elderly, low‑income) from web‑based early warnings—outcomes consistent with documented pathways of rebounding/shifting vulnerability, eroding sustainability, opportunity costs, and path dependence (Evidence: Chi et al., 2020).
+Strengthening fine‑dust responses through predominantly technological or infrastructure fixes (e.g., large‑scale outdoor/indoor filtration systems, hard containment or industry relocation) risks creating maladaptation by generating path dependency and opportunity costs, increasing GHG emissions and energy use (thereby eroding sustainability), shifting or transferring risk onto other places or social groups (burdening low‑income or marginalized residents), and reducing incentives for emissions‑reducing policies—outcomes that may give a false sense of safety while increasing long‑term vulnerability and inequity (Evidence: Chi et al., 2020; Chi et al., 2021; Reckien et al., 2023).
 
 # Inferred risk for: 재해로부터 안전한 산림환경 구축 – 산림종합방제 시스템 구축 (ENG = Building a safe forest environment protected from disasters - Establishing an integrated forest control system)
-Establishing a centralized, techno‑centric 산림종합방제 system risks maladaptation by reinforcing path dependence on suppression-oriented infrastructure and expertise, incurring high opportunity costs that divert resources from landscape‑level, community‑led measures (e.g., extensive grazing, traditional burning, local stewardship) and by narrowly framing adaptation around hazard control rather than broader forest values—outcomes that can shift or increase vulnerability for local groups and erode long‑term sustainable development and adaptive capacity (Evidence: Findlater et al., 2021).
+Implementing a centralized, techno‑centric integrated forest control system could be maladaptive if it is imposed top‑down without aligning to local mental models and development pathways, because it may create path‑dependence and high opportunity costs (locking resources into specific technologies or institutions), shift or rebound vulnerability onto other social groups or territories, erode broader sustainable development goals by privileging narrow technical objectives over local values, and reduce local adaptive capacity when socioeconomic drivers and participation are ignored (Evidence: Zango-Palau et al., 2024; Juhola et al., 2016; Findlater et al., 2021).
 
 # Inferred risk for: 재해로부터 안전한 산림환경 구축 – 기후변화 적응을 위한 산림 확대 (ENG = Building a safe forest environment protected from disasters - Expanding forest cover for climate change adaptation)
-Expanding forests as a climate-adaptation measure can be maladaptive if it creates path dependence and opportunity costs—for example, heavy investment in species-specific or genomics-based reforestation can lock governance and management into narrow, status-quo trajectories that foreclose alternative land uses and broader forest values, reduce future flexibility to respond to changing ecological, social or market conditions, shift vulnerabilities onto other groups or ecosystem components, and even produce technical failure when planted stock is mismatched to future conditions, thereby increasing rather than reducing risk (Evidence: Findlater, 2021).
+Expanding forests as a climate‑adaptation measure can produce maladaptation by creating path dependence and high opportunity costs—locking policy and practice into particular species, technologies or commercial management models that foreclose broader governance options and non‑timber values—and by shifting harms onto other actors or common‑pool resources (e.g., water, soil) or producing technical failure when selected trees or interventions are mismatched to future conditions; stakeholders thus warn this can reinforce the status quo, reduce future adaptability, and externalize environmental and social trade‑offs (Evidence: Findlater et al., 2021; Juhola et al., 2016; Neset et al., 2019).
 
 # Inferred risk for: 안정적 물이용 체계 확보 – 안전한 물 공급 및 깨끗한 수자원 관리 (ENG = Establishing a stable usage framework - Ensuring stable water supply and clean water resource management)
-Implementing actions to secure safe, clean water (e.g., environmental flows, environmental works/measures, water buybacks or large supply infrastructure) can be maladaptive by creating trade‑offs that shift or increase vulnerability: environmental flows and connectivity measures can spread invasive species and cause cold‑water pollution or mobilize saline groundwater; water buybacks and reallocations can place disproportionate socio‑economic burdens on irrigation communities; and investment in certain engineered or single‑source solutions can lock in path‑dependencies, reduce incentives for demand management, concentrate scarce restoration funds in already intact habitats, and even increase emissions via energy‑intensive options—thereby undermining broader resilience and sustainable development (Evidence: Lukasiewicz et al., 2016).
+Measures to secure water supplies and manage water quality (e.g., environmental flows, engineered environmental works, water buybacks, and large infrastructure like desalination) can produce maladaptive trade‑offs: environmental flows and EWMs can spread invasive species and cause cold‑water pollution and uneven ecological benefits while water buybacks can disproportionately burden irrigation communities; energy‑intensive solutions such as desalination can increase GHG emissions and tie water security to energy‑sector vulnerabilities, creating path‑dependency and reducing incentives for conservation, thereby shifting vulnerability and eroding sustainable development (Evidence: Lukasiewicz et al., 2016; Juhola et al., 2016; Tubi and Williams, 2020).
 
 # Inferred risk for: 기후변화 대응 역량 강화 – 저탄소 생활 실천 활성화 (ENG = Strengthening capacities for climate change response - Promoting the practice of low-carbon lifestyles)
-Promoting low‑carbon lifestyle measures in a top‑down, non‑contextual way can be maladaptive by shifting or rebounding vulnerability onto low‑income or marginalized groups through higher opportunity and implementation costs, by creating path‑dependency and high opportunity costs from lock‑in to particular technologies or practices, and by producing negative externalities (e.g., environmental impacts or upstream GHG increases) that erode sustainable development when social contexts and multiple scales are ignored. (Evidence: Juhola et al., 2016; Zango‑Palau et al., 2024; Neset et al., 2019).
+Promoting low‑carbon lifestyle measures without contextualization or participatory deliberation can disproportionately burden low‑income or otherwise vulnerable groups (e.g., through higher upfront costs or opportunity costs), shift vulnerability onto marginalized actors, and erode adaptive capacity when top‑down, one‑size‑fits‑all policies conflict with local needs and mental models or divert resources from more effective adaptation, producing social inequity and potential maladaptive outcomes (Evidence: Juhola et al., 2016; Zango-Palau et al., 2024; Neset et al., 2019).
 ```
 
 ## D. Operational workflow: End-user configuration 
