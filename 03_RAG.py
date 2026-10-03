@@ -396,7 +396,7 @@ def infer_missing_impacts(extracted_txt_path: Path, model: str = LLM_MODEL, top_
                      ## 5. If no evidence supports a maladaptation risk, output only: "(No evidence-based maladaptation found)"
                      ## 6. Respond in English.
                         
-                     Output format:
+                     Output format (must follow this structure strictly):
                      # Inferred risk for: {objective} – {action}
                      [Paragraph OR (No evidence-based maladaptation found)]
                      """
