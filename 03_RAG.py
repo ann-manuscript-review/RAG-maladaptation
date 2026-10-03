@@ -378,7 +378,7 @@ def infer_missing_impacts(extracted_txt_path: Path, model: str = LLM_MODEL, top_
                      ## Do not classify background problems, general negative conditions, or implementation challenges (e.g., costs, burdens, resource shortages) as maladaptation.
                  
                      # Using only the contextual evidence provided below, infer maladaptation risks for each objective–action pair.
-                     # If no evidence supports a maladaptation risks, write: "(No evidence-based maladaptation found)"
+                     # If no evidence supports a maladaptation risk, write: "(No evidence-based maladaptation found)"
                  
                      ---
                      Objective: {objective}
