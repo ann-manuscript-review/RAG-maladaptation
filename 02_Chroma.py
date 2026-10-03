@@ -154,8 +154,8 @@ CLEAN_PROMPT = """
 ### Headers, footers, watermarks, footnotes, and page numbers.
 ### All citation references such as (Smith, 2020), [1], [12,13], etc.
 ## 4. Clean up formatting:
-### - Normalize spacing, remove excessive line breaks.
-### - Structure the text with Markdown headings (##, ###, ####: Section Title, and paragraphs).
+### Normalize spacing, remove excessive line breaks.
+### Structure the text with Markdown headings (##, ###, ####: Section Title, and paragraphs).
 
 # Output only the cleaned Markdown text.
 
