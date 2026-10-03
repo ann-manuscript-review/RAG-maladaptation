@@ -312,7 +312,7 @@ Measures to secure water supplies and manage water quality (e.g., environmental 
 Promoting low‑carbon lifestyle measures without contextualization or participatory deliberation can disproportionately burden low‑income or otherwise vulnerable groups (e.g., through higher upfront costs or opportunity costs), shift vulnerability onto marginalized actors, and erode adaptive capacity when top‑down, one‑size‑fits‑all policies conflict with local needs and mental models or divert resources from more effective adaptation, producing social inequity and potential maladaptive outcomes (Evidence: Juhola et al., 2016; Zango-Palau et al., 2024; Neset et al., 2019).
 ```
 
-- Retrieval and re-ranking results are provided as JSON files for each objective–action pair.
+- Retrieval and reranking results are provided as JSON files for each objective–action pair.
 - An example is shown below: 
 
 ```text
@@ -343,7 +343,7 @@ Promoting low‑carbon lifestyle measures without contextualization or participa
 ```
 
 - Each record includes the objective, action, retrieval query, and retrieved evidence documents.
-- For each document, it reports the evidence ID, original retrieval rank, re-ranking rank and score, selection status for LLM input, and bibliographic metadata.
+- For each document, it reports the evidence ID, original retrieval rank, reranking rank and score, and bibliographic metadata.
 - Article texts in the `passage` field are omitted from the publicly shared files to avoid redistributing copyrighted content.
 
 ## D. Operational workflow: End-user configuration 
