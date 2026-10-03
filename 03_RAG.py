@@ -22,38 +22,58 @@ UPSTAGE_API_KEY = os.getenv("UPSTAGE_API_KEY", "*****************") # Upstage AP
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "*******************") # OpenAI API Key
 LLM_MODEL = "gpt-5-mini-2025-08-07"
 
-# 01.3. Embedding model and DB settings 
-EMB_MODEL = "BAAI/bge-m3"
-emb = HuggingFaceEmbeddings(model_name=EMB_MODEL)
-db = Chroma(persist_directory=str(CHROMA_DIR), embedding_function=emb)
+# 01.3. Embedding model and reranker
+EMB_MODEL = "Qwen/Qwen3-Embedding-0.6B"
+RERANK_MODEL = "Qwen/Qwen3-Reranker-0.6B"
 
-# 01.4. Re-ranker
-reranker = FlagReranker("BAAI/bge-reranker-v2-m3", use_fp16=False)
+emb = HuggingFaceEmbeddings(
+    model_name=EMB_MODEL,
+    encode_kwargs={
+        "normalize_embeddings": True,
+        "prompt_name": "query",
+    },
+)
+
+db = Chroma(
+    persist_directory=str(CHROMA_DIR),
+    embedding_function=emb,
+)
+
+reranker = CrossEncoder(
+    RERANK_MODEL,
+    max_length=32768,
+)
 
 # 02. Passer API Call (Upstage Document Parse)
 def parse_with_upstage(pdf_path: Path) -> str:
     url = "https://api.upstage.ai/v1/document-digitization"
     headers = {"Authorization": f"Bearer {UPSTAGE_API_KEY}"}
 
-    with open(pdf_path, "rb") as f:
-        files = {"document": f}
-        payload = {
-            "model": "document-parse-260930", "ocr": "force",
-            "output_formats": ["html"], "merge_multipage_tables": True, "chart_recognition": True
-        }
+    payload = {
+        "model": "document-parse-260930",
+        "ocr": "force",
+        "output_formats": "['html']",
+        "merge_multipage_tables": "true",
+        "chart_recognition": "true",
+    }
 
-        res = requests.post(url, headers=headers, files=files, data=payload)
-
-    if res.status_code != 200:
-        raise RuntimeError(
-            f"Passer API error ({res.status_code})\n"
-            f"Response: {res.text[:500]}..."
+    with pdf_path.open("rb") as f:
+        res = requests.post(
+            url,
+            headers=headers,
+            files={"document": f},
+            data=payload,
+            timeout=(30, 300),
         )
 
-    data = res.json()
-    html = data.get("content", {}).get("html", "")
-    if not html.strip():
-        raise ValueError("Parsed HTML is empty.")
+    res.raise_for_status()
+
+    html = res.json().get("content", {}).get("html")
+
+    if not isinstance(html, str) or not html.strip():
+        raise ValueError(
+            "Upstage returned empty or invalid HTML."
+        )
 
     out_path = OUT_DIR / f"{pdf_path.stem}_parsed.html"
     out_path.write_text(html, encoding="utf-8")
@@ -277,15 +297,28 @@ def infer_missing_impacts(extracted_txt_path: Path, model: str = LLM_MODEL, top_
             docs = db.similarity_search(query, k=top_k)
 
             # 05.2.3. Re-ranking
+            pairs_for_rerank = [
+                (query, d.page_content)
+                for d in docs
+            ]
+
+            rerank_scores = reranker.predict(
+                pairs_for_rerank
+            )
+
             scored_docs = [
                 (
-                    float(reranker.compute_score([query, d.page_content])[0]),
-                    retrieval_rank,
-                    d,
+                    float(score), retrieval_rank, d,
                 )
-                for retrieval_rank, d in enumerate(docs, start=1)
+                for retrieval_rank, (score, d) in enumerate(
+                    zip(rerank_scores, docs),
+                    start=1,
+                )
             ]
-            scored_docs.sort(key=lambda x: x[0], reverse=True)
+
+            scored_docs.sort(
+                key=lambda x: x[0], reverse=True,
+            )
 
             # 05.2.4. Build evidence text
             evidence_records = []
@@ -464,4 +497,3 @@ def infer_missing_impacts(extracted_txt_path: Path, model: str = LLM_MODEL, top_
 # 05.4. Run inference
 extracted_txt_path = OUT_DIR / f"LLM_Extract_{html_path.stem.replace('_section_merged','')}.txt"
 infer_missing_impacts(extracted_txt_path)
-
