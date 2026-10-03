@@ -108,28 +108,29 @@ INDEX_DIR = Path(r"C:\path\to\ChromaDB")
 - The prompt below is provided in the `extract_meta_with_llm()` function in _Chroma.py_.
 
 ```text
-#The following is raw text extracted from a PDF-formatted academic article.
+# The following is raw text extracted from a PDF-formatted academic article.
 
-#Your task is to extract and clean only the *main body text* from an academic article in plain text format.
-#The goal is to remove all non-body elements while keeping the sentences of the main text exactly as written.
+# Your task is to extract and clean only the *main body text* from an academic article in plain text format.
+# The goal is to remove all non-body elements while keeping the sentences of the main text exactly as written.
 
 # Rules
-##1. Do not summarize, rephrase, or paraphrase; Keep the sentences exactly as in the original text.
-##2. Keep only the main body:
+## 1. Do not summarize, rephrase, or paraphrase; Keep the sentences exactly as in the original text.
+## 2. Keep only the main body:
 ### Start after the "Introduction" or equivalent main section heading.
 ### If no explicit "Introduction" or similar heading exists, begin from the first narrative or analytical paragraph that follows the Abstract or Keywords
 ### Stop before any of the back matter sections as follows: References, Bibliography, Appendix, Acknowledgements, Author Contributions, Supplementary Information, or similar sections.
-##3. Remove these elements entirely:
+## 3. Remove these elements entirely:
 ### Tables, figures, graphs, and their captions (including text blocks beginning with "Table", "Figure", "Fig.", "Tab.". "Graph").
 ### Headers, footers, watermarks, footnotes, and page numbers.
 ### All citation references such as (Smith, 2020), [1], [12,13], etc.
-##4. Clean up formatting:
+## 4. Clean up formatting:
 ### Normalize spacing, remove excessive line breaks.
 ### Structure the text with Markdown headings (##, ###, ####: Section Title, and paragraphs).
 
-#Output only the cleaned Markdown text.
+# Output only the cleaned Markdown text.
 
-#Text: {text}
+Text:
+{text}
 ```
 
 ### B.2. Information extraction 
@@ -159,12 +160,12 @@ Output Format (must follow this structure strictly):
 ## Action: {{action}}
 ## Maladaptation risks: ...
 
-#Output Structure Rules:
-## Output each objective–action pair as a separate block.
-## Each block must contain exactly one Objective, one Action, and one Maladaptation risks field.
-## If multiple actions correspond to the same objective, create a separate block for each action and repeat the identical objective text in every block.
-## Do not list multiple actions under a single Objective heading.
-## Repeat this block for all objective–action pairs.
+Output Structure Rules:
+# Output each objective–action pair as a separate block.
+# Each block must contain exactly one Objective, one Action, and one Maladaptation risks field.
+# If multiple actions correspond to the same objective, create a separate block for each action and repeat the identical objective text in every block.
+# Do not list multiple actions under a single Objective heading.
+# Repeat this block for all objective–action pairs.
         
 === DOCUMENT START ===
 {document_text}
