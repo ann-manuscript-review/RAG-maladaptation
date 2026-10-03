@@ -14,8 +14,8 @@
   - `openai` — LLM invocation (GPT-5-mini)
   - `requests` — Upstage Document Parse API call
   - `langchain_community.vectorstores.Chroma` — ChromaDB client
-  - `langchain_community.embeddings.HuggingFaceEmbeddings` — bge-m3 embedding model
-  - `FlagEmbedding` — bge-reranker-v2-m3 reranker
+  - `langchain_community.embeddings.HuggingFaceEmbeddings` — Qwen3 embedding model
+  - `sentence-transformers` — Qwen3 reranker and embedding backend
   - `PyPDF2` — PDF splitting and handling
   - `pathlib` — file management
   - `re` — regular expression parsing
@@ -23,7 +23,7 @@
 - Recommended installation:
 
 ```bash
-pip install openai langchain-community chromadb sentence-transformers FlagEmbedding PyPDF2 requests
+pip install openai langchain-community chromadb sentence-transformers PyPDF2 requests
 ```
 
 ### A.2. Directory structure
@@ -61,8 +61,8 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 |---|---|
 | Document parsing | `document-parse-260930` (Upstage) |
 | LLM | `gpt-5-mini-2025-08-07` (OpenAI) |
-| Embedding | `BAAI/bge-m3` |
-| Reranking | `BAAI/bge-reranker-v2-m3` |
+| Embedding | `Qwen/Qwen3-Embedding-0.6B` |
+| Reranking | `Qwen/Qwen3-Reranker-0.6B` |
 
 - All LLM calls used the same GPT-5-mini snapshot (`gpt-5-mini-2025-08-07`) with reasoning effort set to `medium`.
 - The code explicitly specifies this setting in both the information extraction and plausible maladaptation risk inference calls:
@@ -74,7 +74,8 @@ reasoning={"effort": "medium"}
 - No explicit output token limit (`max_output_tokens`) was set.
 - For plausible maladaptation risk inference, the prompt instructed the model to return a single concise paragraph.
 
-- The reranker is initialized with `use_fp16=False`.
+- The pipeline uses `Qwen/Qwen3-Embedding-0.6B` for embedding and `Qwen/Qwen3-Reranker-0.6B` for reranking; both models support input sequences of up to 32,768 tokens.
+- The longest cleaned article in the evidence corpus contained 24,442 tokens when tokenized with the Qwen tokenizer; therefore, no article-level truncation was required during embedding.
 
 ### A.4. Evidence database construction
 
@@ -100,7 +101,7 @@ INDEX_DIR = Path(r"C:\path\to\ChromaDB")
 ```
 
 - The construction script parses the PDFs, extracts bibliographic metadata, cleans the article body texts, and stores the texts and their embeddings in Chroma.
-- Each cleaned article is stored as a single document in Chroma and serves as one retrieval unit.
+- Each article is embedded as a single document using `Qwen/Qwen3-Embedding-0.6B`.
 - After database construction, set `CHROMA_DIR` in the main inference script (_RAG.py_) to the same directory as `INDEX_DIR`.
 
 ## B. Prompt and query
@@ -365,7 +366,7 @@ First, the user provides the target plan as a PDF and specifies the page from wh
 
 Using the converted file, the model invokes the LLM with a predefined prompt (Figure S1(b)). The prompt instructs the model to classify specific expressions in the document as objectives or actions, consistent with the terminology used in the target planning document (e.g., 실천과제 → action). It also prohibits the model from rewriting the content present in the document and inferring information that is not explicitly stated. For each objective–action pair, the model assesses whether the plan explicitly considers plausible maladaptation risks. If no such consideration is identified, the model outputs “(Missing)” for the corresponding pair. Here, “explicit consideration” does not require the term “maladaptation” to appear in the plan. It refers to whether the plan explicitly describes an unexpected side effect or adverse consequences that may arise from implementing the action. 
 
-When plausible maladaptation risks are not identified in the planning document, the pipeline proceeds to an evidence-based inference module that leverages an external knowledge base (Figure S1(c)). For each objective–action pair, the model constructs a retrieval query using a predefined template (see Section B.3), retrieves the five most relevant articles from a Chroma vector database using bge-m3 embeddings (_k_ = 5), and reranks these articles using bge-reranker-v2-m3. The three highest-ranked articles are then supplied to the LLM as contextual evidence (_k_ = 3).<sup>1</sup> Based only on the selected evidence, the LLM generates a concise paragraph describing a plausible maladaptation risk and cites the supporting evidence used in the inference.
+When plausible maladaptation risks are not identified in the planning document, the pipeline proceeds to an evidence-based inference module that leverages an external knowledge base (Figure S1(c)). For each objective–action pair, the model constructs a retrieval query using a predefined template (see Section B.3), retrieves the five most relevant articles from a Chroma vector database using Qwen3-Embedding-0.6B (_k_ = 5), and reranks these articles using Qwen3-Reranker-0.6B. The three highest-ranked articles are then supplied to the LLM as contextual evidence (_k_ = 3).<sup>1</sup> Based only on the selected evidence, the LLM generates a concise paragraph describing a plausible maladaptation risk and cites the supporting evidence used in the inference.
 
 1) _k_ values are pragmatic settings to limit computational cost and are not theoretically fixed; they can be adjusted by corpus size and analytical objectives. 
 
