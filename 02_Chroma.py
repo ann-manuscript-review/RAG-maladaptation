@@ -7,6 +7,7 @@ from openai import OpenAI
 from langchain_core.documents import Document
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
+from typing import Optional
 
 # 00. Configuration
 UPSTAGE_API_KEY = "*********************"
@@ -103,38 +104,146 @@ def extract_meta_with_llm(text: str) -> dict:
     """
     return json.loads(ask_llm(prompt, json_mode=True))
 
-def search_crossref_by_meta(title: str, authors: str, year: str) -> str:
+def normalize_title(s: str) -> str:
+    """Normalize a title while preserving Unicode alphanumeric characters."""
+    return "".join(
+        ch for ch in str(s).casefold()
+        if ch.isalnum()
+    )
+
+def extract_year(value) -> Optional[int]:
+    """Extract a four-digit publication year when available."""
+    m = re.search(r"\b(19|20)\d{2}\b", str(value))
+    return int(m.group(0)) if m else None
+
+def search_crossref_by_meta(
+    title: str, authors, year
+) -> str:
+
+    if not title or len(str(title).strip()) < 10:
+        return ""
+
     try:
-        first_author = authors.split(",")[0] if authors else ""
+        if isinstance(authors, (list, tuple)):
+            authors = ", ".join(
+                str(a).strip() for a in authors if a
+            )
+        else:
+            authors = str(authors or "").strip()
+
+        first_author = ""
+        if authors:
+            first_author = re.split(
+                r"\s*(?:,|;|\band\b|&)\s*",
+                authors
+            )[0]
+
+        params = {
+            "query.title": str(title).strip(),
+            "rows": 5,
+        }
+
+        if first_author:
+            params["query.author"] = first_author
+
         r = requests.get(
             CROSSREF_URL,
-            params={"query.title": title, "query.author": first_author, "rows": 3},
+            params=params,
             timeout=10,
         )
+
         if r.status_code != 200:
+            print(
+                f"CrossRef search returned status "
+                f"{r.status_code}."
+            )
             return ""
-        for it in r.json().get("message", {}).get("items", []):
-            cand_title = (it.get("title") or [""])[0].lower()
-            if title.lower()[:40] in cand_title:            
-                return it.get("DOI", "")
-    except Exception:
-        pass
+
+        target = normalize_title(title)[:40]
+
+        if not target:
+            return ""
+
+        target_year = extract_year(year)
+
+        for item in r.json().get("message", {}).get("items", []):
+
+            candidate_title = normalize_title(
+                (item.get("title") or [""])[0]
+            )
+
+            if target not in candidate_title:
+                continue
+
+            candidate_year_raw = (
+                item.get("issued", {}).get("date-parts")
+                or [[None]]
+            )[0][0]
+
+            candidate_year = extract_year(candidate_year_raw)
+
+            if (
+                target_year is not None
+                and candidate_year is not None
+                and abs(candidate_year - target_year) > 1
+            ):
+                continue
+
+            doi = item.get("DOI", "")
+            if doi:
+                return doi
+
+    except Exception as e:
+        print(f"CrossRef search failed: {e}")
+
     return ""
 
 def extract_metadata_pipeline(text: str) -> dict:
     doi = extract_doi(text)
+
     if doi:
         meta = fetch_crossref_metadata(doi)
+
         if meta:
+            meta["meta_source"] = "crossref_doi"
             return meta
 
-    meta = extract_meta_with_llm(text)
+    llm_meta = extract_meta_with_llm(text)
+
+    if not isinstance(llm_meta, dict):
+        raise ValueError(
+            "LLM metadata extraction did not return a dictionary."
+        )
+
+    authors = llm_meta.get("authors", "")
+
+    if isinstance(authors, (list, tuple)):
+        authors_for_search = ", ".join(
+            str(a).strip() for a in authors if a
+        )
+    else:
+        authors_for_search = str(authors or "").strip()
+
     doi = search_crossref_by_meta(
-        meta.get("title", ""), meta.get("authors", ""), meta.get("year", "")
+        llm_meta.get("title", ""),
+        authors_for_search,
+        llm_meta.get("year", ""),
     )
+
     if doi:
-        meta["doi"] = doi
-    return meta
+        meta = fetch_crossref_metadata(doi)
+
+        if meta:
+            meta["meta_source"] = "crossref_search"
+            return meta
+
+        llm_meta["doi"] = doi
+        llm_meta["meta_source"] = "llm_with_crossref_doi"
+        return llm_meta
+
+    llm_meta["meta_source"] = "llm"
+
+    return llm_meta
 
 # 03. Main body text cleaning
 CLEAN_PROMPT = """
