@@ -225,7 +225,8 @@ Output Format (must follow this structure strictly):
 # Objective: {objective}
 ## Action: {action}
 ## Maladaptation risks: ...
-(Repeat this block for all objectives)
+
+(Repeat this block for all objective–action pairs)
 ```
 
 - Inference:
