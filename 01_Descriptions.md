@@ -312,6 +312,40 @@ Measures to secure water supplies and manage water quality (e.g., environmental 
 Promoting low‑carbon lifestyle measures without contextualization or participatory deliberation can disproportionately burden low‑income or otherwise vulnerable groups (e.g., through higher upfront costs or opportunity costs), shift vulnerability onto marginalized actors, and erode adaptive capacity when top‑down, one‑size‑fits‑all policies conflict with local needs and mental models or divert resources from more effective adaptation, producing social inequity and potential maladaptive outcomes (Evidence: Juhola et al., 2016; Zango-Palau et al., 2024; Neset et al., 2019).
 ```
 
+- Retrieval and re-ranking results are provided as JSON files for each objective–action pair.
+- An example is shown below: 
+
+```text
+{
+  "objective": "기후변화로부터 구민 건강 보호",
+  "action": "취약계층 중심 건강관리 강화",
+  "query": "Maladaptation from implementing '기후변화로부터 구민 건강 보호' via measure '취약계층 중심 건강관리 강화'.",
+  "evidence": [
+    {
+      "evidence_id": "E2",
+      "retrieval_rank": 5,
+      "rerank_rank": 2,
+      "rerank_score": 0.12791958451271057,
+      "selected_for_llm": true,
+      "citation": "Chi et al., 2021",
+      "metadata": {
+        "authors": "Chia-Fa Chi, Shiau-Yun Lu, Willow Hallgren, Daniel Ware, Rodger Tomlinson",
+        "source": "C:\\path\\Included\\Chi et al. (2021).pdf",
+        "doi": "10.3390/su13063450",
+        "journal": "Sustainability",
+        "year": "2021",
+        "title": "Role of Spatial Analysis in Avoiding Climate Change Maladaptation: A Systematic Review"
+      },
+      "passage": null
+   },
+
+...
+```
+
+- Each record includes the objective, action, retrieval query, and retrieved evidence documents.
+- For each document, it reports the evidence ID, original retrieval rank, re-ranking rank and score, selection status for LLM input, and bibliographic metadata.
+- Article texts in the `passage` field are omitted from the publicly shared files to avoid redistributing copyrighted content.
+
 ## D. Operational workflow: End-user configuration 
 ### D.1. Summary
 
