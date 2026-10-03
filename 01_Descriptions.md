@@ -196,7 +196,7 @@ Maladaptation from implementing '{objective}' via measure '{action}'.
 ---
 Objective: {objective}
                     
-Actions: {action}
+Action: {action}
 
 Contextual Evidence: {context_text}
 ---
