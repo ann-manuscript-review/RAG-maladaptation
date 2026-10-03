@@ -18,7 +18,7 @@ OUT_DIR = Path(r"C:\path\to\processed_articles")
 INDEX_DIR = Path(r"C:\path\to\ChromaDB")
 
 LLM_MODEL = "gpt-5-mini-2025-08-07"
-EMBED_MODEL = "BAAI/bge-m3"
+EMBED_MODEL = "Qwen/Qwen3-Embedding-0.6B"
 UPSTAGE_URL = "https://api.upstage.ai/v1/document-digitization"
 CROSSREF_URL = "https://api.crossref.org/works"
 
@@ -303,8 +303,18 @@ def process_pdf(pdf_path: Path, db: Chroma) -> None:
     db.add_documents([doc])
 
 def main() -> None:
-    emb = HuggingFaceEmbeddings(model_name=EMBED_MODEL)
-    db = Chroma(persist_directory=str(INDEX_DIR), embedding_function=emb)
+    emb = HuggingFaceEmbeddings(
+        model_name=EMBED_MODEL,
+        encode_kwargs={
+            "normalize_embeddings": True
+        },
+    )
+
+    db = Chroma(
+        persist_directory=str(INDEX_DIR),
+        embedding_function=emb,
+        collection_metadata={"hnsw:space": "cosine"},
+    )
 
     for pdf_path in PDF_DIR.glob("*.pdf"):
         print(f"Processing: {pdf_path.name}")
