@@ -31,14 +31,26 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 RE_DOI = re.compile(r"(10\.\s*\d[\d\s]{3,8}/[\w.\-()\s/;:+]+)", re.I)
 
 def ask_llm(prompt: str, json_mode: bool = False) -> str:
-    kwargs = {"response_format": {"type": "json_object"}} if json_mode else {}
+    kwargs = (
+        {"response_format": {"type": "json_object"}}
+        if json_mode else {}
+    )
+
     resp = client.chat.completions.create(
         model=LLM_MODEL,
         reasoning_effort="medium",
-        messages=[{"role": "user", "content": prompt}],
+        messages=[
+            {"role": "user", "content": prompt}
+        ],
         **kwargs,
     )
-    return resp.choices[0].message.content
+
+    content = resp.choices[0].message.content
+
+    if not content or not content.strip():
+        raise ValueError("OpenAI returned an empty response.")
+
+    return content.strip()
 
 def write_text(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
@@ -85,23 +97,44 @@ def extract_doi(text: str) -> str:
     return doi
 
 def fetch_crossref_metadata(doi: str) -> dict:
-    r = requests.get(f"{CROSSREF_URL}/{doi}", timeout=10)
-    if r.status_code != 200:
+    try:
+        r = requests.get(
+            f"{CROSSREF_URL}/{doi}",
+            timeout=10,
+        )
+
+        if r.status_code != 200:
+            return {}
+
+        item = r.json().get("message", {})
+
+        first = lambda key: (item.get(key) or [""])[0]
+
+        authors = [
+            f"{a.get('given', '')} {a.get('family', '')}".strip()
+            for a in item.get("author", [])
+        ]
+
+        year = (
+            item.get("issued", {}).get("date-parts")
+            or [[None]]
+        )[0][0]
+
+        return {
+            "title": first("title"),
+            "authors": ", ".join(a for a in authors if a),
+            "year": str(year) if year is not None else "",
+            "journal": first("container-title"),
+            "doi": doi,
+        }
+
+    except requests.RequestException as e:
+        print(f"CrossRef lookup failed for {doi}: {e}")
         return {}
 
-    item = r.json().get("message", {})
-    first = lambda key: (item.get(key) or [""])[0]
-    authors = [
-        f"{a.get('given', '')} {a.get('family', '')}".strip()
-        for a in item.get("author", [])
-    ]
-    return {
-        "title": first("title"),
-        "authors": ", ".join(a for a in authors if a),
-        "year": str(item.get("issued", {}).get("date-parts", [[None]])[0][0]),
-        "journal": first("container-title"),
-        "doi": doi,
-    }
+    except Exception as e:
+        print(f"Invalid CrossRef response for {doi}: {e}")
+        return {}
 
 def extract_meta_with_llm(text: str) -> dict:
     prompt = f"""
@@ -286,10 +319,26 @@ def clean_with_gpt(text: str) -> str:
 
 # 04. Metadata formatting
 def flatten_meta(meta: dict) -> dict:
-    return {
-        k: ", ".join(map(str, v)) if isinstance(v, list) else v
-        for k, v in meta.items()
-    }
+    flat = {}
+
+    for key, value in meta.items():
+
+        if value is None:
+            flat[key] = ""
+
+        elif isinstance(value, (list, tuple)):
+            flat[key] = ", ".join(map(str, value))
+
+        elif isinstance(value, dict):
+            flat[key] = json.dumps(
+                value,
+                ensure_ascii=False
+            )
+
+        else:
+            flat[key] = value
+
+    return flat
 
 # 05. Main
 def process_pdf(pdf_path: Path, db: Chroma) -> None:
@@ -331,8 +380,6 @@ def main() -> None:
             process_pdf(pdf_path, db)
         except Exception as e:
             print(f"Failed to process {pdf_path.name}: {e}")
-
-    db.persist()
 
 if __name__ == "__main__":
     main()
