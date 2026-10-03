@@ -48,19 +48,28 @@ def parse_with_upstage(pdf_path: Path) -> str:
     payload = {
         "model": "document-parse-260930",
         "ocr": "force",
-        "output_formats": ["html"],
-        "merge_multipage_tables": True,
-        "chart_recognition": True,
+        "output_formats": "['html']",
+        "merge_multipage_tables": "true",
+        "chart_recognition": "true",
     }
-    with open(pdf_path, "rb") as f:
+    
+    with pdf_path.open("rb") as f:
         res = requests.post(
             UPSTAGE_URL,
             headers={"Authorization": f"Bearer {UPSTAGE_API_KEY}"},
             files={"document": f},
             data=payload,
+            timeout=(30, 300),
         )
+
     res.raise_for_status()
-    return res.json()["content"]["html"]
+
+    html_text = res.json().get("content", {}).get("html")
+
+    if not isinstance(html_text, str) or not html_text.strip():
+        raise ValueError("Upstage returned empty or invalid HTML.")
+
+    return html_text
 
 # 02. Bibliographic metadata
 def extract_doi(text: str) -> str:
