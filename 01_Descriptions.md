@@ -159,12 +159,12 @@ Output Format (must follow this structure strictly):
 ## Action: {{action}}
 ## Maladaptation risks: ...
 
-Output Structure Rules:
-# Output each objective–action pair as a separate block.
-# Each block must contain exactly one Objective, one Action, and one Maladaptation risks field.
-# If multiple actions correspond to the same objective, create a separate block for each action and repeat the identical objective text in every block.
-# Do not list multiple actions under a single Objective heading.
-# Repeat this block for all objective–action pairs.
+#Output Structure Rules:
+## Output each objective–action pair as a separate block.
+## Each block must contain exactly one Objective, one Action, and one Maladaptation risks field.
+## If multiple actions correspond to the same objective, create a separate block for each action and repeat the identical objective text in every block.
+## Do not list multiple actions under a single Objective heading.
+## Repeat this block for all objective–action pairs.
         
 === DOCUMENT START ===
 {document_text}
@@ -208,7 +208,7 @@ Contextual Evidence: {context_text}
 ## 5. If no evidence supports a maladaptation risk, output only: "(No evidence-based maladaptation found)"
 ## 6. Respond in English.
                         
-Output format:
+Output format (must follow this structure strictly):
 # Inferred risk for: {objective} – {action}
 [Paragraph OR (No evidence-based maladaptation found)]
 ```
