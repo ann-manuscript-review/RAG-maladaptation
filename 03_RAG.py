@@ -1,6 +1,7 @@
 # 01. Settings 
 import os
 import re
+import json
 from pathlib import Path
 import requests
 from openai import OpenAI
@@ -116,8 +117,8 @@ def extract_section_by_fixed_keywords(pdf_path: Path, min_page_threshold: int = 
     reader = PdfReader(pdf_path)
     start_page, end_page = None, None
 
-    start_kw = "(E.g.)부문별세부시행계획"  # Starting keyword; enter the wording exactly as written in the document
-    end_kw = "(E.g.)계획의집행및관리"      # Ending keyword; enter the wording exactly as written in the document
+    start_kw = "부문별세부시행계획"  # Starting keyword; enter the wording exactly as written in the document (E.g., 부문별세부시행계획)
+    end_kw = "계획의집행및관리"      # Ending keyword; enter the wording exactly as written in the document (E.g., 계획의집행및관리)
 
     # 03.1. Locate start and end pages
     for i, page in enumerate(reader.pages):
@@ -131,7 +132,7 @@ def extract_section_by_fixed_keywords(pdf_path: Path, min_page_threshold: int = 
             break
 
     if start_page is None:
-        raise ValueError(f"Start keyword '{start_kw}' not found after page {min_page_threshold}.")
+        raise ValueError(f"Start keyword '{start_kw}' not found after page {min_page_threshold + 1}.")
     if end_page is None:
         end_page = len(reader.pages)
 
@@ -157,7 +158,7 @@ def extract_section_by_fixed_keywords(pdf_path: Path, min_page_threshold: int = 
 
 # 03.3. Pipeline execution
 files = list_pdfs()
-target_pdf = pick_pdf_by_fragment("(E.g.)순천시")  # Select the plan, matching its name.
+target_pdf = pick_pdf_by_fragment("순천시")  # Select the plan(e.g., 순천시), matching its name.
 section_parts = extract_section_by_fixed_keywords(target_pdf, min_page_threshold=150, max_section_pages=90)  # 'min_page_threshold=150': start keyword search begins after page 150 / 'max_section_pages=90': split extracted section into chunks of up to 90 pages
 
 merged_html = ""  
@@ -226,6 +227,42 @@ ask_llm_on_document(html_path)
 
 # 05. Inference stage: Objective-action pair inference
 # ---------------------------------------------------------
+def format_author_year(metadata):
+    authors = metadata.get("author") or metadata.get("authors")
+    year = metadata.get("year")
+
+    if not authors or not year:
+        source = (
+            metadata.get("title")
+            or metadata.get("source")
+            or "Unknown source"
+        )
+        return f"{source} [author/year metadata incomplete]"
+
+    if isinstance(authors, (list, tuple)):
+        names = [str(name).strip() for name in authors if name]
+    else:
+        names = re.split(
+            r"\s*(?:;|,|\band\b|&)\s*",
+            str(authors).strip(),
+        )
+
+    names = [name for name in names if name]
+
+    if not names:
+        return f"Unknown author, {year}"
+
+    surnames = [name.split()[-1] for name in names]
+
+    if len(surnames) == 1:
+        author_text = surnames[0]
+    elif len(surnames) == 2:
+        author_text = f"{surnames[0]} and {surnames[1]}"
+    else:
+        author_text = f"{surnames[0]} et al."
+
+    return f"{author_text}, {year}"
+
 def infer_missing_impacts(extracted_txt_path: Path, model: str = LLM_MODEL, top_k: int = 5):
     client = OpenAI(api_key=OPENAI_API_KEY)
     extracted_text = extracted_txt_path.read_text(encoding="utf-8")
