@@ -60,7 +60,7 @@ def parse_with_upstage(pdf_path: Path) -> str:
 
     return html
 
-# 03. Large-PDF Splitting + Parsing + HTML Merging
+# 03. PDF Parsing + HTML Merging
 def list_pdfs(max_n: int = 10):  # Return list of PDF files in the PDF directory.
     pdf_files = sorted(PDF_DIR.glob("*.pdf"))
     if not pdf_files:
@@ -78,41 +78,6 @@ def pick_pdf_by_fragment(fragment: str) -> Path:  # Select a PDF file by matchin
     target = matches[0]
     return target
 
-def split_pdf(input_path: Path, output_dir: Path, max_pages: int = 90):  # Split a PDF into multiple parts with max_pages per part.
-    reader = PdfReader(str(input_path))
-    total_pages = len(reader.pages)
-    parts = (total_pages // max_pages) + (1 if total_pages % max_pages else 0)
-    output_paths = []
-
-    for i in range(parts):
-        writer = PdfWriter()
-        start, end = i * max_pages, min((i + 1) * max_pages, total_pages)
-        for j in range(start, end):
-            writer.add_page(reader.pages[j])
-
-        out_path = OUT_DIR / f"{input_path.stem}_part{i+1}.pdf"
-        with open(out_path, "wb") as f:
-            writer.write(f)
-        output_paths.append(out_path)
-
-    return output_paths
-
-def parse_large_pdf_with_upstage(pdf_path: Path, max_pages: int = 90) -> str:  # Parsing each segment + merging (HTML). 
-    split_paths = split_pdf(pdf_path, OUT_DIR, max_pages=max_pages)
-    merged_html = ""
-
-    for i, part_path in enumerate(split_paths, start=1):
-        try:
-            html_chunk = parse_with_upstage(part_path)
-            merged_html += f"\n<!-- PART {i} START -->\n" + html_chunk + f"\n<!-- PART {i} END -->\n"
-        except Exception as e:
-            print(f"Failed to parse {part_path.name}: {e}")
-            continue
-
-    merged_path = OUT_DIR / f"{pdf_path.stem}_merged.html"
-    merged_path.write_text(merged_html, encoding="utf-8")
-    return merged_html
-
 def extract_section_by_fixed_keywords(pdf_path: Path, min_page_threshold: int = 10, max_section_pages: int = 90) -> list[Path]:  # Extract a section of a PDF bounded by fixed Korean keywords, then split into chunks if the section exceeds max_section_pages.
     reader = PdfReader(pdf_path)
     start_page, end_page = None, None
@@ -125,7 +90,7 @@ def extract_section_by_fixed_keywords(pdf_path: Path, min_page_threshold: int = 
         text = page.extract_text() or ""
         text_clean = re.sub(r"\s+", "", text)
 
-        if start_page is None and i > min_page_threshold and start_kw in text_clean:
+        if start_page is None and i >= min_page_threshold and start_kw in text_clean:
             start_page = i
         elif start_page is not None and end_kw in text_clean:
             end_page = i
@@ -158,7 +123,7 @@ def extract_section_by_fixed_keywords(pdf_path: Path, min_page_threshold: int = 
 
 # 03.3. Pipeline execution
 files = list_pdfs()
-target_pdf = pick_pdf_by_fragment("순천시")  # Select the plan(e.g., 순천시), matching its name.
+target_pdf = pick_pdf_by_fragment("file_name")  # Select the plan, matching its name.
 section_parts = extract_section_by_fixed_keywords(target_pdf, min_page_threshold=150, max_section_pages=90)  # 'min_page_threshold=150': start keyword search begins after page 150 / 'max_section_pages=90': split extracted section into chunks of up to 90 pages
 
 merged_html = ""  
