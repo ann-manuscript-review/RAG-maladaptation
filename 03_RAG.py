@@ -270,7 +270,7 @@ def infer_missing_impacts(extracted_txt_path: Path, model: str = LLM_MODEL, top_
         # 05.2. Inference for each missing action
         for aidx, action in enumerate(missing_actions, start=1):
 
-            # 05.2.1. Query for retrieval (Objective–Measure pair) 
+            # 05.2.1. Query for retrieval (Objective–Action pair) 
             query = f"Maladaptation from implementing '{objective}' via measure '{action}'."
 
             # 05.2.2. Retrieval
@@ -348,7 +348,7 @@ def infer_missing_impacts(extracted_txt_path: Path, model: str = LLM_MODEL, top_
                      ---
                      Objective: {objective}
                     
-                     Actions: {action}
+                     Action: {action}
 
                      Contextual Evidence: {context_text}
                      ---
