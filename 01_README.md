@@ -23,12 +23,12 @@
 - Recommended installation:
 
 ```bash
-pip install openai langchain-community chromadb FlagEmbedding PyPDF2 requests
+pip install openai langchain-community chromadb sentence-transformers FlagEmbedding PyPDF2 requests
 ```
 
 ### A.2. Directory structure
 
-- The following folders must exist before running the pipeline:
+- The pipeline uses the following directory structure:
 
 ```bash
 BASE/
@@ -100,6 +100,7 @@ INDEX_DIR = Path(r"C:\path\to\ChromaDB")
 ```
 
 - The construction script parses the PDFs, extracts bibliographic metadata, cleans the article body texts, and stores the texts and their embeddings in Chroma.
+- Each cleaned article is stored as a single document in Chroma and serves as one retrieval unit
 - After database construction, set `CHROMA_DIR` in the main inference script (_RAG.py_) to the same directory as `INDEX_DIR`.
 
 ## B. Prompt and query
@@ -345,7 +346,7 @@ Promoting low‑carbon lifestyle measures without contextualization or participa
 
 - Each record includes the objective, action, retrieval query, and retrieved evidence documents.
 - For each document, it reports the evidence ID, original retrieval rank, reranking rank and score, selection status for LLM input, and bibliographic metadata.
-- Article texts in the `passage` field are omitted from the publicly shared files to avoid redistributing copyrighted content.
+- Article texts in the `passage` field is omitted from the example shown here to avoid redistributing copyrighted content.
 
 ## D. Operational workflow: End-user configuration 
 ### D.1. Summary
@@ -358,7 +359,7 @@ Promoting low‑carbon lifestyle measures without contextualization or participa
   <b>Figure S1.</b> Model operation workflow for end users.
 </p>
 
-This section explains the operation of the proposed planning support model from an end-user perspective. To run the model, users must prepare the target planning document (PDF) and access the Upstage Document Parse and OpenAI (GPT) API key. The overall operational flow comprised three stages: (1) document input and preprocessing, (2) structured information extraction, and (3) evidence-based inference of plausible maladaptation risks. This section outlines the general workflow of these procedures. 
+This section explains the operation of the proposed planning support model from an end-user perspective. To run the model, users must prepare the target planning document (PDF), have access to API keys for Upstage Document Parse and OpenAI (GPT), and have a locally constructed Chroma evidence database. The overall operational flow comprises three stages: (1) document input and preprocessing, (2) structured information extraction, and (3) evidence-based inference of plausible maladaptation risks. This section outlines the general workflow of these procedures. 
 
 First, the user provides the target plan as a PDF and specifies the page from which section searching should begin, together with the keywords marking the beginning and end of the relevant section. As the parser cannot process documents exceeding 100 pages, the identified section is divided into segments of up to 90 pages when necessary (Figure S1(a)). Each segment is converted separately into HTML using Upstage Document Parse, and the resulting HTML files are subsequently merged into a single document. Once these document-specific parameters are specified, the subsequent extraction process proceeds automatically. 
 
@@ -396,4 +397,4 @@ end_kw   = "계획의집행및관리"
 ## Only the sections in the document’s tables or main text that are explicitly marked as “실천과제” should be identified as {{action}}.
 ## Only structural labels (e.g., 추진전략, 실천과제) determine classification; Do not classify objectives and actions based on semantic meaning, wording style, and phrasing.
 ```
-- Since local governments frequently employ different expressions for equivalent hierarchical concepts, {objective} and {action}, these labels were revised for each document to reflect its specific wording.
+- Because local governments may use different labels for equivalent hierarchical levels, the objective and action labels were adjusted as needed to match the terminology used in each document.
