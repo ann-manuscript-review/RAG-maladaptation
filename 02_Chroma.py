@@ -164,7 +164,7 @@ Text:
 """
 
 def clean_with_gpt(text: str) -> str:
-    return ask_llm(CLEAN_PROMPT.format(text=text[:200000]))
+    return ask_llm(CLEAN_PROMPT.format(text=text[:500000]))
 
 # 04. Metadata formatting
 def flatten_meta(meta: dict) -> dict:
