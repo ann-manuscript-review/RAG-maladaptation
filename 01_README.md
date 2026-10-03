@@ -64,7 +64,7 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 | Embedding | `BAAI/bge-m3` |
 | Reranking | `BAAI/bge-reranker-v2-m3` |
 
-- The same GPT-5-mini snapshot (`gpt-5-mini-2025-08-07`) and reasoning effort setting (`medium`) were used across all runs. 
+- All LLM calls used the same GPT-5-mini snapshot (`gpt-5-mini-2025-08-07`) with reasoning effort set to `medium`.
 - The code explicitly specifies this setting in both the information extraction and plausible maladaptation risk inference calls:
 
 ```python
@@ -100,7 +100,7 @@ INDEX_DIR = Path(r"C:\path\to\ChromaDB")
 ```
 
 - The construction script parses the PDFs, extracts bibliographic metadata, cleans the article body texts, and stores the texts and their embeddings in Chroma.
-- Each cleaned article is stored as a single document in Chroma and serves as one retrieval unit
+- Each cleaned article is stored as a single document in Chroma and serves as one retrieval unit.
 - After database construction, set `CHROMA_DIR` in the main inference script (_RAG.py_) to the same directory as `INDEX_DIR`.
 
 ## B. Prompt and query
@@ -346,7 +346,7 @@ Promoting low‑carbon lifestyle measures without contextualization or participa
 
 - Each record includes the objective, action, retrieval query, and retrieved evidence documents.
 - For each document, it reports the evidence ID, original retrieval rank, reranking rank and score, selection status for LLM input, and bibliographic metadata.
-- Article texts in the `passage` field is omitted from the example shown here to avoid redistributing copyrighted content.
+- Article text in the `passage` field is omitted from the example shown here to avoid redistributing copyrighted content.
 
 ## D. Operational workflow: End-user configuration 
 ### D.1. Summary
