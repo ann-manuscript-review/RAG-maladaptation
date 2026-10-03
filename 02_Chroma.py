@@ -138,29 +138,28 @@ def extract_metadata_pipeline(text: str) -> dict:
 
 # 03. Main body text cleaning
 CLEAN_PROMPT = """
-The following is raw text extracted from a PDF-formatted academic article.
+#The following is raw text extracted from a PDF-formatted academic article.
 
-Your task is to extract and clean only the *main body text* from an academic article in plain text format.
-The goal is to remove all non-body elements while keeping the sentences of the main text exactly as written.
+#Your task is to extract and clean only the *main body text* from an academic article in plain text format.
+#The goal is to remove all non-body elements while keeping the sentences of the main text exactly as written.
 
-### Rules
-1. Do not summarize, rephrase, or paraphrase; Keep the sentences exactly as in the original text.
-2. Keep only the main body:
-    - Start after the "Introduction" or equivalent main section heading.
-    - If no explicit "Introduction" or similar heading exists, begin from the first narrative or analytical paragraph that follows the Abstract or Keywords
-    - Stop before any of the back matter sections as follows: References, Bibliography, Appendix, Acknowledgements, Author Contributions, Supplementary Information, or similar sections.
-3. Remove these elements entirely:
-    - Tables, figures, graphs, and their captions (including text blocks beginning with "Table", "Figure", "Fig.", "Tab.", "Graph").
-    - Headers, footers, watermarks, footnotes, and page numbers.
-    - All citation references such as (Smith, 2020), [1], [12,13], etc.
-4. Clean up formatting:
-    - Normalize spacing, remove excessive line breaks.
-    - Structure the text with Markdown headings (##, ###, ####: Section Title, and paragraphs).
+#Rules
+##1. Do not summarize, rephrase, or paraphrase; Keep the sentences exactly as in the original text.
+##2. Keep only the main body:
+### Start after the "Introduction" or equivalent main section heading.
+### If no explicit "Introduction" or similar heading exists, begin from the first narrative or analytical paragraph that follows the Abstract or Keywords
+### Stop before any of the back matter sections as follows: References, Bibliography, Appendix, Acknowledgements, Author Contributions, Supplementary Information, or similar sections.
+##3. Remove these elements entirely:
+### Tables, figures, graphs, and their captions (including text blocks beginning with "Table", "Figure", "Fig.", "Tab.", "Graph").
+### Headers, footers, watermarks, footnotes, and page numbers.
+### All citation references such as (Smith, 2020), [1], [12,13], etc.
+##4. Clean up formatting:
+### - Normalize spacing, remove excessive line breaks.
+### - Structure the text with Markdown headings (##, ###, ####: Section Title, and paragraphs).
 
-Output only the cleaned Markdown text.
+#Output only the cleaned Markdown text.
 
-Text:
-{text}
+#Text: {text}
 """
 
 def clean_with_gpt(text: str) -> str:
