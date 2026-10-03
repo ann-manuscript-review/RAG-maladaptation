@@ -7,7 +7,7 @@ import requests
 from openai import OpenAI
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from FlagEmbedding import FlagReranker
+from sentence_transformers import CrossEncoder
 from PyPDF2 import PdfReader, PdfWriter
 
 # 01.1. Path
