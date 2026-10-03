@@ -28,14 +28,14 @@ pip install openai langchain-community chromadb FlagEmbedding PyPDF2 requests
 
 ### A.2. Directory structure
 
-- The following folders must exist befor running the pipeline:
+- The following folders must exist before running the pipeline:
 
 ```bash
 BASE/
 │── CCAP_Action_Plan/        # Original PDFs (local government plans)
 │── ChromaDB/                # Pre-built vector store persisted by Chroma
 │── Output/                  # LLM outputs: extracted text, HTML, inference results
-│── RAG.py          # Main pipeline script
+│── RAG.py                   # Main pipeline script
 ```
 
 - In the script:
@@ -173,7 +173,7 @@ Output Structure Rules:
 ```
 ### B.3. Retrieval query 
 
-- The prompt below is provided in the `infer_missing_impacts()` function in _RAG.py_.
+- The following predefined retrieval query template is used in the `infer_missing_impacts()` function in _RAG.py_.
 
 ```text
 Maladaptation from implementing '{objective}' via measure '{action}'.
@@ -191,7 +191,7 @@ Maladaptation from implementing '{objective}' via measure '{action}'.
 ## Do not classify background problems, general negative conditions, or implementation challenges (e.g., costs, burdens, resource shortages) as maladaptation.
                  
 # Using only the contextual evidence provided below, infer maladaptation risks for each objective–action pair.
-# If no evidence supports a maladaptation risks, write: "(No evidence-based maladaptation found)"
+# If no evidence supports a maladaptation risk, write: "(No evidence-based maladaptation found)"
                  
 ---
 Objective: {objective}
@@ -313,8 +313,8 @@ Measures to secure water supplies and manage water quality (e.g., environmental 
 Promoting low‑carbon lifestyle measures without contextualization or participatory deliberation can disproportionately burden low‑income or otherwise vulnerable groups (e.g., through higher upfront costs or opportunity costs), shift vulnerability onto marginalized actors, and erode adaptive capacity when top‑down, one‑size‑fits‑all policies conflict with local needs and mental models or divert resources from more effective adaptation, producing social inequity and potential maladaptive outcomes (Evidence: Juhola et al., 2016; Zango-Palau et al., 2024; Neset et al., 2019).
 ```
 
-- Retrieval and reranking results are provided as JSON files for each objective–action pair.
-- An example is shown below: 
+- Retrieval and reranking results are stored as JSON files for each objective–action pair.
+- An example of the JSON structure is shown below.
 
 ```text
 {
@@ -364,7 +364,7 @@ First, the user provides the target plan as a PDF and specifies the page from wh
 
 Using the converted file, the model invokes the LLM with a predefined prompt (Figure S1(b)). The prompt instructs the model to classify specific expressions in the document as objectives or actions, consistent with the terminology used in the target planning document (e.g., 실천과제 → action). It also prohibits the model from rewriting the content present in the document and inferring information that is not explicitly stated. For each objective–action pair, the model assesses whether the plan explicitly considers plausible maladaptation risks. If no such consideration is identified, the model outputs “(Missing)” for the corresponding pair. Here, “explicit consideration” does not require the term “maladaptation” to appear in the plan. It refers to whether the plan explicitly describes an unexpected side effect or adverse consequences that may arise from implementing the action. 
 
-When plausible maladaptation risks are not identified in the planning document, the user may activate an evidence-based inference module that leverages an external knowledge base (Figure S1(c)). For each objective–action pair, the model constructs a retrieval query using a predefined template (see Section B.3), retrieves the five most relevant articles from a Chroma vector database using bge-m3 embeddings (_k_ = 5), and reranks these articles using bge-reranker-v2-m3. The three highest-ranked articles are then supplied to the LLM as contextual evidence (_k_ = 3).<sup>1</sup> Based only on the selected evidence, the LLM generates a concise paragraph describing a plausible maladaptation risk and cites the supporting evidence used in the inference.
+When plausible maladaptation risks are not identified in the planning document, the pipeline proceeds to an evidence-based inference module that leverages an external knowledge base (Figure S1(c)). For each objective–action pair, the model constructs a retrieval query using a predefined template (see Section B.3), retrieves the five most relevant articles from a Chroma vector database using bge-m3 embeddings (_k_ = 5), and reranks these articles using bge-reranker-v2-m3. The three highest-ranked articles are then supplied to the LLM as contextual evidence (_k_ = 3).<sup>1</sup> Based only on the selected evidence, the LLM generates a concise paragraph describing a plausible maladaptation risk and cites the supporting evidence used in the inference.
 
 1) _k_ values are pragmatic settings to limit computational cost and are not theoretically fixed; they can be adjusted by corpus size and analytical objectives. 
 
