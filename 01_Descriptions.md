@@ -343,7 +343,7 @@ Promoting low‑carbon lifestyle measures without contextualization or participa
 ```
 
 - Each record includes the objective, action, retrieval query, and retrieved evidence documents.
-- For each document, it reports the evidence ID, original retrieval rank, reranking rank and score, and bibliographic metadata.
+- For each document, it reports the evidence ID, original retrieval rank, reranking rank and score, selection status for LLM input, and bibliographic metadata.
 - Article texts in the `passage` field are omitted from the publicly shared files to avoid redistributing copyrighted content.
 
 ## D. Operational workflow: End-user configuration 
