@@ -109,26 +109,32 @@ INDEX_DIR = Path(r"C:\path\to\ChromaDB")
 # Extract the text exactly as written in the document. Do not paraphrase, rewrite, or modify wording.
 # Do not infer, assume, or supplement any information that is not explicitly stated in the document.
 # Exclude all labels, numbering, bracketed codes, and formatting markers from outputs; return only the descriptive text.
-
-# Objective/Action classification rules:
-## Only the sections in the document’s tables or main text that are explicitly marked as “추진전략” should be identified as {objective}.
-## Only the sections in the document’s tables or main text that are explicitly marked as “실천과제” should be identified as {action}.
+        
+# Objective/Action classification rules:       
+## Only the sections in the document’s tables or main text that are explicitly marked as “추진전략” should be identified as {{objective}}.
+## Only the sections in the document’s tables or main text that are explicitly marked as “실천과제” should be identified as {{action}}.
 ## Only structural labels (e.g., 추진전략, 실천과제) determine classification; Do not classify objectives and actions based on semantic meaning, wording style, and phrasing.
-
-# Maladaptation definition:
+        
+# Maladaptation definition: 
 ## Maladaptation arises from unintended trade-offs created by implementing an action to achieve its objective—such as harms imposed on other policy goals, social groups, or spatial areas.
 ## Do not classify background problems, general negative conditions, or implementation challenges (e.g., costs, burdens, resource shortages) as maladaptation.
 ## Do not infer maladaptation unless explicitly stated; if no maladaptation is explicitly mentioned for an action, output “(Missing)”.
-
-# Extract maladaptation risks only for each {action} in relation to its corresponding {objective}.
+        
+# Extract maladaptation risks only for each {{action}} in relation to its corresponding {{objective}}.
 # Attach maladaptation output under each action, but treat maladaptation as occurring at the objective–action pair level.
-
+        
 Output Format (must follow this structure strictly):
-# Objective: {objective}
-## Action: {action}
+# Objective: {{objective}}
+## Action: {{action}}
 ## Maladaptation risks: ...
-(Repeat this block for all objectives)
 
+Output Structure Rules:
+# Output each objective–action pair as a separate block.
+# Each block must contain exactly one Objective, one Action, and one Maladaptation risks field.
+# If multiple actions correspond to the same objective, create a separate block for each action and repeat the identical objective text in every block.
+# Do not list multiple actions under a single Objective heading.
+# Repeat this block for all objective–action pairs.
+        
 === DOCUMENT START ===
 {document_text}
 === DOCUMENT END ===
@@ -161,9 +167,11 @@ Contextual Evidence: {context_text}
                  
 # Instructions:
 ## 1. Write ONE concise paragraph describing an evidence-supported maladaptation.
-## 2. End with an inline citation: (Evidence: Author, Year).
-## 3. If no evidence supports a maladaptation risk, output only: "(No evidence-based maladaptation found)"
-## 4. Respond in English.
+## 2. Cite supporting evidence using its exact ID in square brackets, e.g., [E1] or [E1] [E2].
+## 3. Only cite evidence IDs provided in Contextual Evidence.
+## 4. Do not write author-year citations yourself; these will be added programmatically.                     
+## 5. If no evidence supports a maladaptation risk, output only: "(No evidence-based maladaptation found)"
+## 6. Respond in English.
                         
 Output format:
 # Inferred risk for: {objective} – {action}
