@@ -80,11 +80,11 @@ reasoning={"effort": "medium"}
 ### A.4. Evidence database construction
 
 - The _Chroma.py_ script provides the code used to construct the Chroma evidence database.
-- The bibliographic list of articles included in the corpus is provided in Table S14 of the Supplementary Materials.
+- The bibliographic list of articles included in the corpus is provided in Table S13 of the Supplementary Materials.
 
 - The Chroma database is not publicly distributed because it contains article body texts, including those from non-open-access publications.
 
-- To construct the database locally, obtain authorized copies of the articles listed in Table S14 and configure the following directories:
+- To construct the database locally, obtain authorized copies of the articles listed in Table S13 and configure the following directories:
 
 | Variable | Description |
 | --- | --- |
