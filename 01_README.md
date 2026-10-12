@@ -353,7 +353,7 @@ Promoting low‑carbon lifestyles without accounting for extreme heat and local 
 ### D.1. Summary
 
 <p align="center">
-  <img src="Figure_S1.png" width="800">
+  <img src="Figure_D1.png" width="800">
 </p>
 
 <p align="center">
